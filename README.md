@@ -1,5 +1,5 @@
 # stockfighter
-Fsharp library fot stockfighter API.
+Fsharp library for https://www.stockfighter.io API.
 
 Example usage:
 ```fsharp
