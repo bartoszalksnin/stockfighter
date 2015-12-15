@@ -46,6 +46,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common.fs" />
+    <Compile Include="stockfighterFunctional.fs" />
     <Compile Include="stockfighterApi.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
