@@ -31,8 +31,8 @@ module stockfighterApi
         printf "%s\n" url
         let request = get url apiKey
         let response = request |> getResponseBody
-        printfn "%s" (response)
-        response
+        let responseObject = GetQuoteResponse(response)
+        responseObject
 
     member this.getOrderStatus (venue: String, stock: String, id: String) =
         let url = baseUrl + "/venues/" + venue + "/stocks/" + stock + "/orders/" + id
@@ -119,8 +119,8 @@ module stockfighterApi
     member this.getOrderBook () =
       venue.api.getOrderBook (venue.venue, stock)
 
-    member this.cancelOrder (orderId: String) =
-      venue.api.cancelOrder (venue.venue, stock, orderId)
+    member this.cancelOrder (orderId: int) =
+      venue.api.cancelOrder (venue.venue, stock, sprintf "%i" orderId)
 
     member this.getAllOrdersForStock() =
       venue.api.getAllOrdersForStock(venue.venue, stock)

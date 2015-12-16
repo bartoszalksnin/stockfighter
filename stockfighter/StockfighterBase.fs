@@ -22,6 +22,30 @@ module StockfigherCommon
       ts: String
   }
 
+
+
+  type GetQuoteResponse(response : String) =
+    let info = JsonValue.Parse(response)
+    let askValue =
+      let askvalue = info.TryGetProperty("ask")
+      match askvalue with
+        | None -> 0
+        | _ -> info?ask.AsInteger()
+
+    member this.ok: bool = info?ok.AsBoolean()
+    member this.symbol: String = info?symbol.AsString()
+    member this.venue: String = info?venue.AsString()
+    member this.bid: int = info?bid.AsInteger()
+    member this.ask: int = askValue
+    member this.bidSize: int = info?bidSize.AsInteger()
+    member this.askSize: int = info?askSize.AsInteger()
+    member this.bidDepth: int = info?bidDepth.AsInteger()
+    member this.askDepth: int = info?askDepth.AsInteger()
+    member this.last: int = info?last.AsInteger()
+    member this.lastSize: int = info?lastSize.AsInteger()
+    member this.lastTrade: String = info?lastSize.AsString()
+    member this.quoteTime: String = info?quoteTime.AsString()
+
   type MakeOrderResponse(response : String) =
     let info = JsonValue.Parse(response)
     member this.ok: bool = info?ok.AsBoolean()
