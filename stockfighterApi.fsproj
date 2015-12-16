@@ -44,11 +44,15 @@
     <Reference Include="HttpClient">
       <HintPath>.\packages\Http.fs\Lib\Net40\HttpClient.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Data">
+      <HintPath>.\packages\FSharp.Data\lib\net40\Fsharp.Data.dll</HintPath>
+    </Reference>
+
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common.fs" />
-    <Compile Include="stockfighterFunctional.fs" />
-    <Compile Include="stockfighterApi.fs" />
+    <Compile Include="stockfighter/StockfighterBase.fs" />
+    <Compile Include="stockfighter/stockfighterFunctional.fs" />
+    <Compile Include="stockfighter/stockfighterApi.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
   <PropertyGroup>

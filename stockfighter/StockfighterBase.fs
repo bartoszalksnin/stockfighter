@@ -21,7 +21,36 @@ module StockfigherCommon
       qty: int;
       ts: String
   }
+(*
+  "ok": true,
+  "venue": "FXYHEX",
+  "symbol": "SOF",
+  "ts": "2015-12-16T00:51:42.695139801Z",
+  "bids": [
+    {
+      "price": 5218,
+      "qty": 14777,
+      "isBuy": true
+    },
+  ],
+  "asks": [
+    {
+      "price": 5270,
+      "qty": 10222,
+      "isBuy": false
+    },
+  ]
+  type OrderBook(response : String) =
+    let info = JsonValue.Parse(response)
 
+
+
+    member this.ok: bool = info?ok.AsBoolean()
+    member this.symbol: String = info?symbol.AsString()
+    member this.venue: String = info?venue.AsString()
+
+
+  *)
 
 
   type GetQuoteResponse(response : String) =
