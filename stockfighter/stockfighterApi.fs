@@ -14,16 +14,13 @@ module stockfighterApi
     response
 
   type StockFighter(apiKey: String, account: String) =
-
-
     member this.makeOrder (order: Order) =
         let url = baseUrl + "/venues/" + order.venue + "/stocks/" + order.symbol + "/orders"
         let request = post url order apiKey
         let response = request |> getResponseBody
         printfn "new response is this %s" (response)
-        let responseObject = MakeOrderResponse(response)
+        let responseObject = OrderStatus(response)
         responseObject
-
 
     member this.getQuote (venue: String, stock: String) =
         //https://api.stockfighter.io/ob/api/venues/:venue/stocks/:stock/quote
@@ -39,7 +36,7 @@ module stockfighterApi
         let request = get url apiKey
         let response = request |> getResponseBody
         printfn "%s" (response)
-        let responseObject = MakeOrderResponse(response)
+        let responseObject = OrderStatus(response)
         responseObject
 
     member this.isVenueUp(venue: String) =
@@ -61,11 +58,11 @@ module stockfighterApi
       let request = get url apiKey
       let response = request |> getResponseBody
       printfn "%s" (response)
-      response
+      let responseObject = OrderBook(response)
+      responseObject
 
     member this.cancelOrder(venue: String, stock: String, orderId: String) =
       //https://api.stockfighter.io/ob/api/venues/:venue/stocks/:stock/orders/:order
-      //https://api.stockfighter.io/ob/api/venues/YLEEX/stocks/ZEXI
       let url = baseUrl + "/venues/" + venue + "/stocks/" + stock + "/orders/" + orderId
       printfn "%s\n" url
       let request = delete url apiKey
@@ -106,8 +103,9 @@ module stockfighterApi
     member this.api = api
 
   type StockFighterStock (venue: StockFighterVenue, stock: String) =
-    member this.makeBuyOrder (price: int, quantity: int) =
-      let order = Order(venue.api.account, venue.venue, stock, price, quantity, Buy, Limit)
+
+    member this.makeOrder (price: int, quantity: int, direction: Direction) =
+      let order = Order(venue.api.account, venue.venue, stock, price, quantity, direction, Limit)
       venue.api.makeOrder order
 
     member this.getQuote() =

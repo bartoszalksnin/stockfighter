@@ -21,40 +21,47 @@ module StockfigherCommon
       qty: int;
       ts: String
   }
-(*
-  "ok": true,
-  "venue": "FXYHEX",
-  "symbol": "SOF",
-  "ts": "2015-12-16T00:51:42.695139801Z",
-  "bids": [
-    {
-      "price": 5218,
-      "qty": 14777,
-      "isBuy": true
-    },
-  ],
-  "asks": [
-    {
-      "price": 5270,
-      "qty": 10222,
-      "isBuy": false
-    },
-  ]
+
+  type OrderRequest = { price: int; qty: int }
+
+  type OrderBookItem(value) =
+    let valueType =
+      match value?isBuy.AsBoolean() with
+      | true -> Direction.Buy
+      | false -> Direction.Sell
+
+    member this.price = value?price.AsInteger()
+    member this.qty = value?qty.AsInteger()
+    member this.orderType = valueType
+
   type OrderBook(response : String) =
     let info = JsonValue.Parse(response)
+    let bidsArray =
+      info?bids.AsArray()
+      |> Array.map (fun x ->
+          OrderBookItem(x))
 
+    let asksArray =
+      info?bids.AsArray()
+      |> Array.map (fun x ->
+          OrderBookItem(x))
 
-
+    member this.bids = bidsArray
+    member this.asks = asksArray
     member this.ok: bool = info?ok.AsBoolean()
     member this.symbol: String = info?symbol.AsString()
     member this.venue: String = info?venue.AsString()
 
 
-  *)
-
 
   type GetQuoteResponse(response : String) =
     let info = JsonValue.Parse(response)
+    let bidValue =
+      let bidValue = info.TryGetProperty("bid")
+      match bidValue with
+        | None -> 0
+        | _ -> info?bid.AsInteger()
+
     let askValue =
       let askvalue = info.TryGetProperty("ask")
       match askvalue with
@@ -64,7 +71,7 @@ module StockfigherCommon
     member this.ok: bool = info?ok.AsBoolean()
     member this.symbol: String = info?symbol.AsString()
     member this.venue: String = info?venue.AsString()
-    member this.bid: int = info?bid.AsInteger()
+    member this.bid: int = bidValue
     member this.ask: int = askValue
     member this.bidSize: int = info?bidSize.AsInteger()
     member this.askSize: int = info?askSize.AsInteger()
@@ -75,7 +82,7 @@ module StockfigherCommon
     member this.lastTrade: String = info?lastSize.AsString()
     member this.quoteTime: String = info?quoteTime.AsString()
 
-  type MakeOrderResponse(response : String) =
+  type OrderStatus(response : String) =
     let info = JsonValue.Parse(response)
     member this.ok: bool = info?ok.AsBoolean()
     member this.symbol: String = info?symbol.AsString()
@@ -93,7 +100,7 @@ module StockfigherCommon
     member this.isOpen: bool = info?opens.AsBoolean()
 
 
-  type Order (account: String, venue: String, symbol: String, price : int, qty: int, direction: Direction, orderType: OrderType) =
+  type Order(account: String, venue: String, symbol: String, price : int, qty: int, direction: Direction, orderType: OrderType) =
       member this.account = account
       member this.venue = venue
       member this.symbol = symbol

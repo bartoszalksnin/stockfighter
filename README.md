@@ -16,7 +16,6 @@ venue.isVenueUp()
 venue.listStocks()
 venue.getAllOrders()
 
-stock.makeBuyOrder (10,10)
 stock.getQuote ()
 stock.getOrderStatus("100")
 stock.getOrderBook()
