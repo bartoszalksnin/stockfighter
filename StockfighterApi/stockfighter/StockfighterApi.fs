@@ -44,18 +44,6 @@ module StockfighterApi
 
   let encoder = new UTF8Encoding();
 
-  let sendPong() =
-    let bytes = "pong"B
-    let task = Async.AwaitTask (socket.SendAsync(ArraySegment<byte>(bytes),WebSocketMessageType.Text, false, CancellationToken.None))
-    let result =
-      try
-        Some(Async.RunSynchronously task)
-      with
-        | _ -> None
-    printfn "send result %A " (result)
-    ()
-
-
   let recieveSocketMessages wsUri =
     let buffer = Array.create<byte> 4084 0uy
     let task = Async.AwaitTask (socket.ReceiveAsync(ArraySegment<byte>(buffer),CancellationToken.None))
@@ -66,7 +54,6 @@ module StockfighterApi
         | _ -> None
 
     let bufferString = encoder.GetString(buffer |> Array.filter (fun x -> x <> 0uy))
-    printfn "message %s " bufferString
     if String.length bufferString > 0 then
       try
         let info = JsonValue.Parse(bufferString)
@@ -82,7 +69,7 @@ module StockfighterApi
 
     ()
 
-  let startSocket wsUri  =
+  let startSocket wsUri =
       openSocket wsUri
       printfn "%s" (socket.State.ToString())
       async {

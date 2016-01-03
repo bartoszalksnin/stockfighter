@@ -13,7 +13,7 @@ sh startDashboard.sh
 
 Stop dashboard server (on osx)
 ```fsharp
-sh killtDashboard.sh
+sh killDashboard.sh
 ```
 
 Initalise api
