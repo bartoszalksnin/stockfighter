@@ -15,6 +15,8 @@ Stop dashboard server (on osx)
 ```fsharp
 sh killDashboard.sh
 ```
+<img width="974" alt="dashboard" src="https://cloud.githubusercontent.com/assets/2110061/12076849/819f5e18-b1b6-11e5-8d8f-6344b9deab81.png">
+
 
 Initalise api
 
