@@ -7,11 +7,11 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>1c2f3e07-5bfd-4e8e-9901-b2beb04e6f8e</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>stockfighterApi</RootNamespace>
-    <AssemblyName>stockfighterApi</AssemblyName>
+    <RootNamespace>StockfighterApi</RootNamespace>
+    <AssemblyName>StockfighterApi</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.1.0</TargetFSharpCoreVersion>
-    <Name>stockfighterApi</Name>
+    <Name>StockfighterApi</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\stockfighterApi.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\StockfighterApi.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\stockfighterApi.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\StockfighterApi.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -42,17 +42,17 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="HttpClient">
-      <HintPath>.\packages\Http.fs\Lib\Net40\HttpClient.dll</HintPath>
+      <HintPath>..\packages\Http.fs\Lib\Net40\HttpClient.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Data">
-      <HintPath>.\packages\FSharp.Data\lib\net40\Fsharp.Data.dll</HintPath>
+      <HintPath>..\packages\FSharp.Data\lib\net40\Fsharp.Data.dll</HintPath>
     </Reference>
 
   </ItemGroup>
   <ItemGroup>
     <Compile Include="stockfighter/StockfighterBase.fs" />
-    <Compile Include="stockfighter/stockfighterFunctional.fs" />
-    <Compile Include="stockfighter/stockfighterApi.fs" />
+    <Compile Include="stockfighter/StockfighterFunctional.fs" />
+    <Compile Include="stockfighter/StockfighterApi.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>
   <PropertyGroup>

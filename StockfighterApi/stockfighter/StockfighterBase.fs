@@ -24,6 +24,8 @@ module StockfigherCommon
 
   type OrderRequest = { price: int; qty: int }
 
+  type GraphFrame = { bid: int; ask: int }
+
   type OrderBookItem(value) =
     let valueType =
       match value?isBuy.AsBoolean() with
@@ -31,7 +33,7 @@ module StockfigherCommon
       | false -> Direction.Sell
 
     member this.price = value?price.AsInteger()
-    member this.qty = value?qty.AsInteger()
+    member this.quantity = value?qty.AsInteger()
     member this.orderType = valueType
 
   type OrderBook(response : String) =
@@ -42,7 +44,7 @@ module StockfigherCommon
           OrderBookItem(x))
 
     let asksArray =
-      info?bids.AsArray()
+      info?asks.AsArray()
       |> Array.map (fun x ->
           OrderBookItem(x))
 
@@ -61,12 +63,13 @@ module StockfigherCommon
       match bidValue with
         | None -> 0
         | _ -> info?bid.AsInteger()
-
+    
     let askValue =
       let askvalue = info.TryGetProperty("ask")
       match askvalue with
         | None -> 0
         | _ -> info?ask.AsInteger()
+
 
     member this.ok: bool = info?ok.AsBoolean()
     member this.symbol: String = info?symbol.AsString()
@@ -79,7 +82,7 @@ module StockfigherCommon
     member this.askDepth: int = info?askDepth.AsInteger()
     member this.last: int = info?last.AsInteger()
     member this.lastSize: int = info?lastSize.AsInteger()
-    member this.lastTrade: String = info?lastSize.AsString()
+    member this.lastTrade: String = info?lastTrade.AsString()
     member this.quoteTime: String = info?quoteTime.AsString()
 
   type OrderStatus(response : String) =

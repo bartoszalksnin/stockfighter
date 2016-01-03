@@ -11,19 +11,27 @@ Target "Clean" (fun _ ->
     CleanDirs [buildDir; testDir]
 )
 
-Target "BuildApp" (fun _ ->
-   !! "./*.fsproj"
+Target "BuildApi" (fun _ ->
+   !! "./StockfighterApi/*.fsproj"
+     |> MSBuildRelease buildDir "Build"
+     |> Log "AppBuild-Output: "
+)
+
+Target "BuildDashboardApp" (fun _ ->
+   !! "./StockfighterDashboardApp/*.fsproj"
      |> MSBuildRelease buildDir "Build"
      |> Log "AppBuild-Output: "
 )
 
 Target "Default" (fun _ ->
-    trace "Done"
+    CopyDir (buildDir + "/web/") "./web/" (fun _ -> true)
+    trace "Done is done"
 )
 
 // Dependencies
 "Clean"
-  ==> "BuildApp"
+  ==> "BuildApi"
+  ==> "BuildDashboardApp"
   ==> "Default"
 
 // start build

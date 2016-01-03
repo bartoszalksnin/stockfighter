@@ -1,8 +1,11 @@
 NUGET
   remote: https://nuget.org/api/v2
   specs:
-    FAKE (4.11.3)
+    FAKE (4.12.0)
+    FSharp.Core (4.0.0.1)
     FSharp.Data (2.2.5)
       Zlib.Portable (>= 1.10.0) - framework: portable-net40+sl50+wp80+win80
     Http.fs (1.5.1)
+    Suave (1.0.0-beta2)
+      FSharp.Core (>= 3.1.2.5)
     Zlib.Portable (1.11.0) - framework: portable-net40+sl50+wp80+win80

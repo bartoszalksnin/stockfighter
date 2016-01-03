@@ -1,0 +1,58 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1.1', {packages: ['line']});
+    google.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open( "GET", "http://127.0.0.1:8083/quoteData", false ); 
+      xmlHttp.send( null );
+      console.log(xmlHttp.responseText);
+      var i = 0
+      var data = xmlHttp.responseText.split("\n")
+      var dataReady = data.map(function(x){
+        i++;
+        var arr = x.split(" ").map(function(y){
+          return parseInt(y) / 100;
+        })
+        arr.unshift(i);
+        return arr;
+      })
+
+      var maxSize = 200
+      if(dataReady.length > maxSize)
+      {
+        dataReady = dataReady.slice(dataReady.length - maxSize, dataReady.length)
+      }
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'time');
+      data.addColumn('number', 'bid');
+      data.addColumn('number', 'ask');
+      data.addColumn('number', 'last trade');
+
+      data.addRows(dataReady);
+
+      var options = {
+        chart: {
+          title: 'OrderBook',
+          subtitle: 'bid/ask'
+        },
+        width: 900,
+        height: 500
+      };
+
+      var chart = new google.charts.Line(document.getElementById('linechart_material'));
+
+      chart.draw(data, options);
+      setTimeout(drawChart, 1000)
+    }
+  </script>
+</head>
+<body>
+  <div id="linechart_material"></div>
+</body>
+</html>
