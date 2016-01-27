@@ -9,6 +9,7 @@ module StockfighterApi
   open FSharp.Data
   open FSharp.Data.JsonExtensions
   open StockfigherCommon
+  open SocketWrapper
 
   let logOrderBook (orderBook: OrderBook) =
     let bid =
@@ -33,57 +34,12 @@ module StockfighterApi
 
   let logQuote (orderStatus: GetQuoteResponse) =
     let stream = new StreamWriter("quoteData.txt", true)
-    stream.WriteLine(sprintf "%i %i %i" orderStatus.bid orderStatus.ask orderStatus.last )
+    let ms = sprintf "%i %i %i" orderStatus.bid orderStatus.ask orderStatus.last
+    printfn "%s" ms
+    stream.WriteLine(ms)
     stream.Flush()
     stream.Close()
 
-
-  let socket = new ClientWebSocket()
-  let openSocket wsUri =
-      do socket.ConnectAsync(wsUri, CancellationToken.None) |> ignore
-
-  let encoder = new UTF8Encoding();
-
-  let recieveSocketMessages wsUri =
-    let buffer = Array.create<byte> 4084 0uy
-    let task = Async.AwaitTask (socket.ReceiveAsync(ArraySegment<byte>(buffer),CancellationToken.None))
-    let result =
-      try
-        Some(Async.RunSynchronously task)
-      with
-        | _ -> None
-
-    let bufferString = encoder.GetString(buffer |> Array.filter (fun x -> x <> 0uy))
-    if String.length bufferString > 0 then
-      try
-        let info = JsonValue.Parse(bufferString)
-        let ok = info.TryGetProperty("ok")
-        match ok with
-        | None -> ()
-        | _ -> logQuote (GetQuoteResponse(info?quote.ToString()));
-      with
-        | e -> printfn "failed with %s" (e.ToString())
-    else
-       openSocket wsUri
-       printfn "empty message"
-
-    ()
-
-  let startSocket wsUri =
-      openSocket wsUri
-      printfn "%s" (socket.State.ToString())
-      async {
-        while true do
-          async {
-            do! Async.Sleep(16)
-          } |> Async.RunSynchronously
-          printfn "while end wait %s " (socket.State.ToString())
-          match socket.State with
-          | WebSocketState.Open -> recieveSocketMessages wsUri
-          | WebSocketState.Closed -> openSocket wsUri
-          | _ -> ()
-        ()
-      }
 
   let isApiUp() =
     let url = baseUrl + "/heartbeat"
@@ -243,11 +199,13 @@ module StockfighterApi
     member this.getAllOrdersForStockAsync() =
       venue.api.getAllOrdersForStock venue.venue stock
 
+    member this.getSockertUrl() =
+      Uri("wss://api.stockfighter.io/ob/api/ws/" + venue.api.account + "/venues/" + venue.venue + "/tickertape/stocks/" + stock)
 
     member this.openSocketConnection() =
-      let wsUri = Uri("wss://api.stockfighter.io/ob/api/ws/" + venue.api.account + "/venues/" + venue.venue + "/tickertape/stocks/" + stock)
+      let wsUri = this.getSockertUrl()
       this.token <- new CancellationTokenSource()
-      Async.Start ((startSocket wsUri), this.token.Token)
+      Async.Start ((startSocket wsUri logQuote GetQuoteResponse), this.token.Token)
       ()
 
     member this.closeSocketConnection() =
