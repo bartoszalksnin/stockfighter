@@ -4,4 +4,4 @@ nuget Http.fs
 nuget FSharp.Data
 nuget FAKE
 //nuget FsPlot
-nuget Suave ~> 0.34
+nuget Suave
