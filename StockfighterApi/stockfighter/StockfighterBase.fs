@@ -100,7 +100,10 @@ module StockfigherCommon
     member this.ts: String = info?ts.AsString()
     //member this.fills: List<Fills> = info?fills
     member this.totalFilled: int = info?totalFilled.AsInteger()
-    member this.isOpen: bool = info?opens.AsBoolean()
+    member this.isOpen: bool =
+        info.TryGetProperty "open"
+        |> Option.map (fun j -> j.AsBoolean())
+        |> (fun o -> defaultArg o true)
 
 
   type Order(account: String, venue: String, symbol: String, price : int, qty: int, direction: Direction, orderType: OrderType) =
