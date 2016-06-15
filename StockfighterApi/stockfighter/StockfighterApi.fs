@@ -52,7 +52,7 @@ module StockfighterApi
     member this.makeOrder (order: Order) = async {
       let url = baseUrl + "/venues/" + order.venue + "/stocks/" + order.symbol + "/orders"
       let request = post url order apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "new response is this %s" (response)
       let responseObject = OrderStatus(response)
       return responseObject
@@ -63,7 +63,7 @@ module StockfighterApi
       let url = baseUrl + "/venues/" + venue + "/stocks/" + stock + "/quote"
       printf "%s\n" url
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       let responseObject = GetQuoteResponse(response)
       return responseObject
     }
@@ -71,7 +71,7 @@ module StockfighterApi
     member this.getOrderStatus (venue: String) (stock: String) (id: String) = async {
       let url = baseUrl + "/venues/" + venue + "/stocks/" + stock + "/orders/" + id
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       let responseObject = OrderStatus(response)
       return responseObject
@@ -80,7 +80,7 @@ module StockfighterApi
     member this.isVenueUp(venue: String) = async {
       let url = baseUrl + "/venues/" + venue + "/heartbeat"
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       return response
     }
@@ -88,7 +88,7 @@ module StockfighterApi
     member this.listStocks(venue: String) = async {
       let url = baseUrl + "/venues/" + venue + "/stocks"
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       return response
     }
@@ -97,7 +97,7 @@ module StockfighterApi
     member this.getOrderBook(venue: String) (stock: String) = async {
       let url = baseUrl + "/venues/" + venue + "/stocks/" + stock
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       let responseObject = OrderBook(response)
       logOrderBook responseObject
@@ -109,7 +109,7 @@ module StockfighterApi
       let url = baseUrl + "/venues/" + venue + "/stocks/" + stock + "/orders/" + orderId
       printfn "%s\n" url
       let request = delete url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       return response
     }
@@ -118,7 +118,7 @@ module StockfighterApi
     member this.getAllOrders(venue: String) = async {
       let url = baseUrl + "/venues/" + venue + "/accounts/" + account + "/orders"
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       return response
     }
@@ -128,7 +128,7 @@ module StockfighterApi
       //https://api.stockfighter.io/ob/api/venues/:venue/accounts/:account/stocks/:stock/orders
       let url = baseUrl + "/venues/" + venue + "/accounts/" + account + "/stocks/" + stock + "/orders"
       let request = get url apiKey
-      let response = request |> getResponseBody
+      let! response = request |> getResponseBodyAsync
       printfn "%s" (response)
       return response
     }
