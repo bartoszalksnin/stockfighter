@@ -3,3 +3,9 @@ solutions/level3/level3.fs
 stockfighterApi/solutions
 process.pid
 orderBookData.txt
+.paket/paket.exe
+bin/
+build/
+obj/
+packages/
+.fake/
