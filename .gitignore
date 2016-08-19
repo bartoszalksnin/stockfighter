@@ -9,3 +9,5 @@ build/
 obj/
 packages/
 .fake/
+api_key.prop
+quoteData.txt

@@ -54,6 +54,14 @@ module StockfigherCommon
     member this.symbol: String = info?symbol.AsString()
     member this.venue: String = info?venue.AsString()
 
+  type Level(response: String) =
+    let info = JsonValue.Parse(response)
+
+    member this.instanceId = info?instanceId.AsString()
+    member this.account = info?account.AsString()
+    member this.venue = info?venues.AsArray().[0].AsString()
+    member this.ticker = info?tickers.AsArray().[0].AsString()
+
 
 
   type GetQuoteResponse(response : String) =
@@ -63,7 +71,7 @@ module StockfigherCommon
       match bidValue with
         | None -> 0
         | _ -> info?bid.AsInteger()
-    
+
     let askValue =
       let askvalue = info.TryGetProperty("ask")
       match askvalue with
@@ -124,6 +132,7 @@ module StockfigherCommon
           | ImmidiateOrCancel -> "immediate-or-cancel"
 
   let baseUrl = "https://api.stockfighter.io/ob/api"
+  let gmUrl = "https://www.stockfighter.io/gm"
   let deserializer = (System.Web.Script.Serialization.JavaScriptSerializer())
 
   let serialise obj =

@@ -1,6 +1,6 @@
 source https://www.nuget.org/api/v2
 
-nuget Http.fs
+nuget Http.fs ~> 1.5.1
 nuget FSharp.Data
 nuget FAKE
 //nuget FsPlot

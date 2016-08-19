@@ -48,6 +48,26 @@ module StockfighterApi
     printfn "%s" (response)
     response
 
+  type StockfighterLevel(apiKey: String) =
+    member this.startLevel (levelName: String) = async {
+      let url = gmUrl + "/levels/" + levelName
+      printf "%s\n" url
+      let request = post url "" apiKey
+      let! response = request |> getResponseBodyAsync
+      let responseObject = Level(response)
+      printf "what the %s\n" response
+      return responseObject
+    }
+
+    member this.stopLevel (instanceId: String) = async {
+      let url = gmUrl + "/instances/" + instanceId + "/stop"
+      printf "%s\n" url
+      let request = post url "" apiKey
+      let! response = request |> getResponseBodyAsync
+      return response
+    }
+
+
   type StockFighter(apiKey: String, account: String) =
     member this.makeOrder (order: Order) = async {
       let url = baseUrl + "/venues/" + order.venue + "/stocks/" + order.symbol + "/orders"

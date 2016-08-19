@@ -8,7 +8,7 @@
 #load "stockfighter/SocketWrapper.fs"
 #load "stockfighter/StockfighterApi.fs"
 
-#load "solutions/BaseSolutions.fs"
+//#load "solutions/BaseSolutions.fs"
 
 open System
 open System.IO
@@ -16,7 +16,7 @@ open System.Threading
 open SocketWrapper
 open StockfighterApi
 open StockfigherCommon
-open BaseSolutions
+//open BaseSolutions
 open Suave
 open System.Net
 open System.Threading
@@ -25,15 +25,17 @@ open StockfigherCommon
 
 type Agent<'T> = MailboxProcessor<'T>
 
-let apiKey = "175599580d5ac132efdc7982fc9bbcbc54637d7c"
-let venueId = "QIEHEX"
-let stockId = "FEAU"
-let account = "DWS2919933"
+let apiKey = System.IO.File.ReadAllLines("api_key.prop").[0]
 
-let api = StockFighter(apiKey, account)
-let venue = StockFighterVenue(api, venueId)
-let stock = StockFighterStock(venue, stockId)
+let levelApi = StockfighterLevel(apiKey)
 
+let level = levelApi.startLevel("dueling_bulldozers") |> Async.RunSynchronously
+
+let api = StockFighter(apiKey, level.account)
+let venue = StockFighterVenue(api, level.venue)
+let stock = StockFighterStock(venue, level.ticker)
+
+//levelApi.stopLevel(level.instanceId) |> Async.RunSynchronously
 
 stock.openSocketConnection()
 stock.closeSocketConnection()
